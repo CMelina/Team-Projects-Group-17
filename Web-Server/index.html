@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alliance Intelligence | Secure Uplink</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="container">
+        <header class="main-header">
+            <div class="logo-area">
+                <h1>REBEL ALLIANCE</h1>
+                <p class="subtitle">AUTH: API TOKEN REQUIRED</p>
+            </div>
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <span id="connection-status" class="status-text">RECEIVING...</span>
+            </div>
+        </header>
+
+        <section class="grid-layout">
+            <div class="column">
+                <div class="glass-card">
+                    <h3>Transmission Control</h3>
+                    <p class="data-status">Plans Received: <span id="plan-count">0</span> / 10</p>
+                    <button class="btn-download" id="dl-btn" disabled onclick="downloadPlans()">Download Decrypted Plans</button>
+                </div>
+
+                <div class="glass-card r2-module">
+                    <h3>R2 Unit Memory Bank</h3>
+                    <audio id="r2-audio-player" controls style="width:100%"></audio>
+                    <div id="auth-section" class="auth-box">
+                        <p class="warning-text">RESTRICTED ACCESS</p>
+                        <input type="password" id="api-token-input" placeholder="Enter API Access Key">
+                        <button class="btn-small" onclick="authenticateR2()">Authenticate</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="glass-card table-card">
+                    <h3>Structural Weakness Analysis</h3>
+                    <div class="mobile-scroll">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Sector ID</th>
+                                    <th>Visual Scan</th>
+                                    <th>Integrity</th>
+                                </tr>
+                            </thead>
+                            <tbody id="plans-table-body">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="system-logs">
+            <div id="syslog-display" class="log-line">SYSTEM LOG: STANDBY...</div>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
+
+*/ 
+Notes: Find applicable library for docker container; libcurl library for authentication (HTTPS);
+Prompt for API key; if inputted, show user the full audio/video; if not inputted, show user partial 
+Data conversion and segmentation for transmission
+/*
