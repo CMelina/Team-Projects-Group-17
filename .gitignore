@@ -46,4 +46,10 @@ Thumbs.db
 
 # Backup files
 *.bak
+
 *.backup
+
+# Web Server Specifics
+node_modules/
+system_logs.log
+.DS_Store
