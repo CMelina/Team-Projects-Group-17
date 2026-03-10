@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alliance Intelligence | Secure Uplink</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="stars-overlay"></div>
+    <div class="container">
+        <header class="main-header">
+            <div class="logo-area">
+                <h1>REBEL ALLIANCE</h1>
+                <p class="subtitle">NODE: RPI-066 // AUTH REQUIRED</p>
+            </div>
+        </header>
+
+        <section class="grid-layout">
+            <div class="column">
+                <div class="glass-card">
+                    <h3>R2 Unit Memory Bank</h3>
+                    <div id="r2-video-player"></div>
+                    <div id="auth-section" class="auth-box">
+                        <p class="warning-text">ENCRYPTED TRANSMISSION</p>
+                        <input type="password" id="api-token-input" placeholder="Enter API Access Key">
+                        <button class="btn-small" onclick="authenticateR2()">Authenticate</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="glass-card">
+                    <h3>Exfiltrated Plans (<span id="plan-count">0</span>/10)</h3>
+                    <div class="mobile-scroll">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Sector ID</th>
+                                    <th>Visual Scan</th>
+                                    <th>Integrity (MD5)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="plans-table-body">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="system-logs">
+            <div id="syslog-display" class="log-line">SYSTEM LOG [RFC 5424]: STANDBY...</div>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
