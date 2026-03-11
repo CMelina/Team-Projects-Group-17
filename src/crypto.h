@@ -41,5 +41,8 @@ bool aes256gcm_decrypt(
     std::vector<unsigned char>& plaintext
 );
 
+// Generate a secure random 256-bit key
+std::vector<unsigned char> generate_random_key();
+
 #endif
 

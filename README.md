@@ -1,120 +1,77 @@
 # Secure File Transfer 🔐
 
-AES-256-GCM file encryption tool for secure file transfer.
+This project implements a secure file encryption and decryption pipeline using AES-256-GCM with OpenSSL.
+
+The program encrypts every file in a folder before transmission and restores them after reception.
 
 ## Features
-- 🔒 AES-256-GCM encryption
-- ✅ Authentication tag verification (tamper detection)
-- 📁 Works with any file type
-- 🚀 Simple command-line interface
+• AES-256-GCM authenticated encryption
+• Automatic key generation
+• Folder-level encryption and decryption
+• Integrity verification (tamper detection)
+• Works on Linux / Raspberry Pi
+
+## Dependencies
+
+Install required packages:
+
+sudo apt update
+sudo apt install build-essential cmake libssl-dev
+
+These install:
+
+g++
+
+CMake
+
+OpenSSL crypto library
 
 ## Building the Project
 
-### Prerequisites
-- CMake 3.10+
-- OpenSSL development libraries
-- C++ compiler with C++11 support
+From the project root:
 
-### Build Instructions
-```bash
-# Clone the repository
-git clone <your-repo-url>
-cd secure_transfer
-
-# Create build directory and compile
 mkdir build
 cd build
 cmake ..
 make
-```
+
+This will generate the executable:
+
+## secure_transfer
 
 ## Usage
+Encrypt a folder
+./secure_transfer encrypt <input_folder> <output_folder>
 
-**Important**: The executable looks for files in your **current working directory**. Use relative or absolute paths as needed.
+### Example:
 
-### Encrypt a file
-```bash
-# If file is in current directory
-./secure_transfer encrypt secret.pdf encrypted.bin mypassword123
+./secure_transfer encrypt ../input ../encrypted
 
-# If file is elsewhere (use relative or absolute path)
-./secure_transfer encrypt ../documents/secret.pdf encrypted.bin mypassword123
-./secure_transfer encrypt /home/user/secret.pdf encrypted.bin mypassword123
-```
+Decrypt a folder
+./secure_transfer decrypt <encrypted_folder> <output_folder>
 
-### Decrypt a file
-```bash
-./secure_transfer decrypt encrypted.bin restored.pdf mypassword123
-```
+### Example:
 
-### Run tests
-```bash
-# From build directory (make sure test.png is in parent directory)
-./secure_transfer test
+./secure_transfer decrypt ../encrypted ../decrypted
+Encryption Format
 
-# Or from project root
-./build/secure_transfer test
-```
+Each encrypted file stores the following:
 
-### Get help
-```bash
-./secure_transfer help
-```
+KEY (32 bytes)
+IV  (12 bytes)
+TAG (16 bytes)
+CIPHERTEXT
 
-## Examples
+This allows the receiver to decrypt the file without exposing the key in the command line.
 
-### Encrypt an image
-```bash
-# From build directory
-./secure_transfer encrypt ../vacation.jpg vacation.enc mysecretkey
 
-# From project root
-./build/secure_transfer encrypt vacation.jpg vacation.enc mysecretkey
-```
+## Security Properties
 
-### Decrypt the image
-```bash
-./secure_transfer decrypt vacation.enc vacation_decoded.jpg mysecretkey
-```
+AES-256-GCM provides:
 
-## How It Works
-1. Generates a random 12-byte IV (Initialization Vector)
-2. Encrypts data using AES-256 in GCM mode
-3. Creates a 16-byte authentication tag
-4. Stores: `[IV (12 bytes)] + [TAG (16 bytes)] + [CIPHERTEXT]`
+• Confidentiality – encrypted data cannot be read
+• Integrity – tampered files are rejected
+• Authentication – ensures correct decryption key
 
-## File Format
-Encrypted files have this structure:
-- **Bytes 0-11**: Initialization Vector (IV)
-- **Bytes 12-27**: Authentication Tag
-- **Bytes 28+**: Encrypted data
+If authentication fails, the file will not decrypt.
 
-## Security Notes
-- The encryption key is derived from your password (first 32 bytes)
-- Each encryption uses a unique random IV
-- GCM mode provides both confidentiality and integrity
-- Tampered files will fail decryption automatically
-- Always use strong passwords (at least 12 characters recommended)
-
-## Troubleshooting
-
-### "File does not exist!" error
-The executable looks for files relative to your current directory:
-```bash
-# Check where you are
-pwd
-
-# List files in current directory
-ls -la
-
-# Use correct path to your file
-./secure_transfer encrypt /full/path/to/your/file.jpg output.bin mykey
-```
-
-### Permission denied
-```bash
-chmod +x secure_transfer
-```
-
-## License
-Free to use, modify, and distribute.

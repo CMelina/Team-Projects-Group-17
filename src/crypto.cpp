@@ -201,3 +201,11 @@ bool aes256gcm_decrypt(
     EVP_CIPHER_CTX_free(ctx);
     return ret > 0;
 }
+
+    std::vector<unsigned char> generate_random_key()
+    {
+        std::vector<unsigned char> key(32); // 256-bit key
+        RAND_bytes(key.data(), key.size());
+        return key;
+    }
+
