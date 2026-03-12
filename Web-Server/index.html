@@ -3,55 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alliance Intelligence | Secure Uplink</title>
+    <title>Rebel Dissemination Hub</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="stars-overlay"></div>
     <div class="container">
-        <header class="main-header">
-            <div class="logo-area">
-                <h1>REBEL ALLIANCE</h1>
-                <p class="subtitle">NODE: RPI-066 // AUTH REQUIRED</p>
+        <h1>R2-D2 Metadata Decryption</h1>
+        
+        <div id="video-wrapper">
+            <video id="rebel-video" controls width="100%" poster="r2_poster.png">
+                <source id="video-source" src="Message2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div id="status-bar">
+                Access Level: <span id="access-level">RESTRICTED (50%)</span>
             </div>
-        </header>
+        </div>
 
-        <section class="grid-layout">
-            <div class="column">
-                <div class="glass-card">
-                    <h3>R2 Unit Memory Bank</h3>
-                    <div id="r2-video-player"></div>
-                    <div id="auth-section" class="auth-box">
-                        <p class="warning-text">ENCRYPTED TRANSMISSION</p>
-                        <input type="password" id="api-token-input" placeholder="Enter API Access Key">
-                        <button class="btn-small" onclick="authenticateR2()">Authenticate</button>
-                    </div>
-                </div>
-            </div>
+        <div class="auth-box">
+            <input type="text" id="api-token" placeholder="Enter API Token...">
+            <button onclick="checkAuth()">Unlock Full Message</button>
+        </div>
 
-            <div class="column">
-                <div class="glass-card">
-                    <h3>Exfiltrated Plans (<span id="plan-count">0</span>/10)</h3>
-                    <div class="mobile-scroll">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Sector ID</th>
-                                    <th>Visual Scan</th>
-                                    <th>Integrity (MD5)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="plans-table-body">
-                                </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <footer class="system-logs">
-            <div id="syslog-display" class="log-line">SYSTEM LOG [RFC 5424]: STANDBY...</div>
-        </footer>
+        <table id="plans-table">
+            <thead>
+                <tr>
+                    <th>Plan Name</th>
+                    <th>MD5 Hash</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                </tbody>
+        </table>
     </div>
     <script src="app.js"></script>
 </body>
