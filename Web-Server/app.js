@@ -1,47 +1,50 @@
-let player;
-let fullAccess = false;
+const videoPlayer = document.getElementById('rebel-video');
+const videoSource = document.getElementById('video-source');
+const accessLevel = document.getElementById('access-level');
 
-// Load YouTube API
-const tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-document.head.appendChild(tag);
+async function checkAuth() {
+    const tokenInput = document.getElementById('api-token').value;
 
-async function loadVideo(token = null) {
-    const headers = token ? { 'x-api-key': token } : {};
     try {
-        const response = await fetch('/api/video-config', { headers });
-        const config = await response.json();
-        fullAccess = config.isFullAccess;
+        const response = await fetch('/authenticate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: tokenInput })
+        });
 
-        if (player) {
-            player.loadVideoById(config.videoId);
+        const result = await response.json();
+
+        if (result.success) {
+            // update UI
+            accessLevel.innerText = "AUTHENTICATED (FULL)";
+            accessLevel.style.color = "#ffff00";
+            
+            // swap the video source to the full message
+            videoSource.src = "Message1.mp4";
+            
+            // reload the player to recognize the new source
+            videoPlayer.load();
+            videoPlayer.play();
+            
+            alert("Identity Verified. Playing Full Message.");
         } else {
-            player = new YT.Player('r2-video-player', {
-                height: '240', width: '100%', videoId: config.videoId,
-                events: { 'onStateChange': onPlayerStateChange }
-            });
+            alert("Authentication Failed: Invalid Token.");
         }
-        if (fullAccess) {
-            document.getElementById('auth-section').innerHTML = "<p style='color:#2ecc71'>✓ ACCESS GRANTED</p>";
-        }
-    } catch (e) { console.error("Video Auth Error", e); }
-}
-
-function onPlayerStateChange(event) {
-    if (!fullAccess && event.data == YT.PlayerState.PLAYING) {
-        const timer = setInterval(() => {
-            if (player.getCurrentTime() >= (player.getDuration() / 2)) {
-                player.pauseVideo();
-                alert("Remainder of message is encrypted.");
-                clearInterval(timer);
-            }
-        }, 1000);
+    } catch (error) {
+        console.error("Auth Error:", error);
+        alert("Server Connection Error.");
     }
 }
 
-function authenticateR2() {
-    const key = document.getElementById('api-token-input').value;
-    loadVideo(key);
+// function to poll for incoming plans (SerialPort bridge)
+function updatePlansTable() {
+    fetch('/get-latest-plans')
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.getElementById('table-body');
+            // populate table rows
+        });
 }
 
-window.onYouTubeIframeAPIReady = () => loadVideo();
+// check for new plans every 5 seconds
+setInterval(updatePlansTable, 5000);
