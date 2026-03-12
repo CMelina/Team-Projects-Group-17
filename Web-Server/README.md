@@ -1,6 +1,6 @@
 #  Rebel Dissemination Hub - Web Server Setup
 
-This folder contains the Node.js Rebel Server responsible for the "Obi-Wan Kenobi" authentication test, RFC 5424 logging, and the real-time display of exfiltrated Death Star plans.
+This folder contains the Node.js rebel server responsible for the "Obi-Wan Kenobi" authentication test, RFC 5424 logging, and the real-time display of exfiltrated Death Star plans.
 
 ##  Prerequisites
 
@@ -24,7 +24,7 @@ npm install
 
 ### 2. Configure Hardware Path
 
-Open `server.js` and ensure the serial path is set to the Linux USB port (since `COM3` is for Windows):
+Open `server.js` and ensure the serial path is set to the Linux USB port:
 
 ```
 // Ensure this matches XBee device name
@@ -34,22 +34,20 @@ const port = new SerialPort({ path: '/dev/ttyUSB0', baudRate: 9600 });
 ### 3. Start the Server
 
 Run the launch command:
-
 ```
 node server.js
 ```
-
 The console should display: `Server listening on http://localhost:3000`.
 
 ---
 
 ## Mission Operations & Logic
 
-### The "Obi-Wan Kenobi Message" Authentication Test
+### The Obi-Wan Kenobi Message Authentication Test
 
 The server handles the restricted dissemination of the R2-D2 holographic data:
 
-- Public Access (Default): The HUD loads `Message2.mp4` (a 50% partial version of the secret message).
+- Public Access (default): The HUD loads `Message2.mp4` (a 50% partial version of the mission message).
 - Elevated Access: Entering the correct API Token triggers a frontend swap to `Message1.mp4` (the full mission message).
 
 ### Data Integrity (The Death Star Plans)
@@ -83,6 +81,4 @@ All system events (authentication success/fail, XBee packet arrival, image verif
 
 ## Troubleshooting
 
-- SerialPort Error: If the server crashes on startup, run `ls /dev/tty*` in your terminal to find the correct path for your XBee and update it in `server.js`.
-- Video Not Loading: Ensure both `.mp4` files are in the same directory as `index.html`.
-- Git Rejection: If you cannot push, run `git pull origin main --rebase` first to sync with teammate changes.
+- SerialPort Error: If the server crashes on startup, run `ls /dev/tty*` in the terminal to find the correct path for the XBee and update it in `server.js`.
