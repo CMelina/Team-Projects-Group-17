@@ -1,46 +1,43 @@
 const express = require('express');
-const { SerialPort } = require('serialport');
-const { ReadlineParser } = require('@serialport/parser-readline');
-const fs = require('fs');
-const path = require('path');
-
 const app = express();
+const path = require('path');
+const { SerialPort } = require('serialport');
+const fs = require('fs');
+
+// Configs
 const PORT = 3000;
-const API_KEY = "REBEL_STRIKE_2026"; // specified token
-const LOG_FILE = 'system_logs.log';
+const SERIAL_PATH = '/dev/ttyUSB0'; // Linux path
+const API_TOKEN = "REBEL_BASE_2026"; // Hardcoded key
 
-// Xbee serial setup
-const port = new SerialPort({ path: '/dev/ttyUSB0', baudRate: 9600 });
-const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }));
+// Middleware
+app.use(express.json()); // For reading the API token
+app.use(express.static(__dirname)); // Serves index, app.js, and videos
 
-// RFC 5424 logger function
-function writeRFC5424(severity, msgId, message) {
-    const PRI = (1 * 8) + severity;
-    const logEntry = `<${PRI}>1 ${new Date().toISOString()} rebel-laptop rebel-server ${process.pid} ${msgId} - ${message}\n`;
-    fs.appendFileSync(LOG_FILE, logEntry);
-    console.log(logEntry);
-}
-
-// Serve static frontend files
-app.use(express.static(__dirname));
-app.use('/plans', express.static(path.join(__dirname, 'received_plans')));
-
-// Endpoint for YouTube Config
-app.get('/api/video-config', (req, res) => {
-    const userKey = req.headers['x-api-key'];
-    res.json({
-        videoId: "dQw4w9WgXcQ", // Replace with actual R2 message ID
-        isFullAccess: (userKey === API_KEY)
-    });
+// Serial hardware setup
+const serialPort = new SerialPort({ path: SERIAL_PATH, baudRate: 9600 }, (err) => {
+    if (err) return console.log('Serial Port Error (Check XBee connection):', err.message);
+    console.log(`Serial Port opened on ${SERIAL_PATH}`);
 });
 
-// XBee Listener: Receives data from pyserial script
-parser.on('data', (data) => {
-    writeRFC5424(6, "XBEE_RECEIVE", `Incoming data: ${data}`);
-    // Note: Parse 'data' to update plan list
+// Authentication endpoint
+app.post('/authenticate', (req, res) => {
+    const { token } = req.body;
+    
+    // log the attempt to system_logs.log (RFC 5424 simplified)
+    const logEntry = `<134>1 ${new Date().toISOString()} Puter RebelHub - AUTH_ATTEMPT - Token: ${token}\n`;
+    fs.appendFileSync('system_logs.log', logEntry);
+
+    if (token === API_TOKEN) {
+        console.log("Access Granted: Valid Token.");
+        res.json({ success: true });
+    } else {
+        console.log("Access Denied: Invalid Token.");
+        res.json({ success: false });
+    }
 });
 
+// Server initialization
 app.listen(PORT, () => {
-    if (!fs.existsSync('./received_plans')) fs.mkdirSync('./received_plans');
-    writeRFC5424(6, "SYS_START", `Server active on http://localhost:${PORT}`);
+    console.log(`Rebel Hub online at http://localhost:${PORT}`);
+    console.log(`Defaulting to Message2.mp4 (Restricted)`);
 });
