@@ -1,9 +1,8 @@
-const videoPlayer = document.getElementById('rebel-video');
-const videoSource = document.getElementById('video-source');
-const accessLevel = document.getElementById('access-level');
-
 async function checkAuth() {
     const tokenInput = document.getElementById('api-token').value;
+    const videoPlayer = document.getElementById('rebel-video');
+    const videoSource = document.getElementById('video-source');
+    const statusText = document.getElementById('access-level');
 
     try {
         const response = await fetch('/authenticate', {
@@ -15,36 +14,23 @@ async function checkAuth() {
         const result = await response.json();
 
         if (result.success) {
-            // update UI
-            accessLevel.innerText = "AUTHENTICATED (FULL)";
-            accessLevel.style.color = "#ffff00";
-            
-            // swap the video source to the full message
+            // Update UI
+            statusText.innerText = "AUTHENTICATED (FULL ACCESS)";
+            statusText.style.color = "#ffff00";
+
+            // Change video source to full message
             videoSource.src = "Message1.mp4";
             
-            // reload the player to recognize the new source
+            // Force reload and play
             videoPlayer.load();
             videoPlayer.play();
             
-            alert("Identity Verified. Playing Full Message.");
+            alert("Identity Verified. Accessing Restricted Holo-data.");
         } else {
-            alert("Authentication Failed: Invalid Token.");
+            alert("Authentication Failed. Access Denied.");
         }
     } catch (error) {
-        console.error("Auth Error:", error);
-        alert("Server Connection Error.");
+        console.error("Connection Error:", error);
+        alert("Could not connect to Rebel Server.");
     }
 }
-
-// function to poll for incoming plans (SerialPort bridge)
-function updatePlansTable() {
-    fetch('/get-latest-plans')
-        .then(res => res.json())
-        .then(data => {
-            const tbody = document.getElementById('table-body');
-            // populate table rows
-        });
-}
-
-// check for new plans every 5 seconds
-setInterval(updatePlansTable, 5000);
