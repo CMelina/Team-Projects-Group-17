@@ -28,7 +28,7 @@ Open `server.js` and ensure the serial path is set to the Linux USB port:
 
 ```
 // Ensure this matches XBee device name
-const port = new SerialPort({ path: '/dev/ttyUSB0', baudRate: 9600 });
+const port = new SerialPort({ path: '/dev/ttyUSB0', baudRate: 115200 });
 ```
 
 ### 3. Start the Server
