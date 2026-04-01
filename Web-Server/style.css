@@ -1,19 +1,1 @@
-:root {
-    --neon-blue: #00d2ff; --danger-red: #ff4757; --bg: #05070a;
-}
-body { background: var(--bg); color: white; font-family: 'Courier New', monospace; margin: 0; }
-.container { max-width: 1200px; margin: auto; padding: 20px; }
-.glass-card { 
-    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
-    padding: 20px; border-radius: 10px; backdrop-filter: blur(10px); margin-bottom: 20px;
-}
-.main-header h1 { color: var(--neon-blue); letter-spacing: 5px; border-bottom: 1px solid var(--neon-blue); }
-.grid-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; }
-.data-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-.data-table th { color: var(--neon-blue); text-align: left; padding: 10px; border-bottom: 1px solid #333; }
-.data-table td { padding: 10px; border-bottom: 1px solid #222; }
-.warning-text { color: var(--danger-red); font-weight: bold; font-size: 0.7rem; }
-#api-token-input { background: black; border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 5px; width: 60%; }
-.btn-small { background: var(--neon-blue); color: black; border: none; padding: 5px 15px; cursor: pointer; font-weight: bold; }
 
-@media (max-width: 800px) { .grid-layout { grid-template-columns: 1fr; } }
