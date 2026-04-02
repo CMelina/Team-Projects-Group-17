@@ -1,1 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rebel Dissemination Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>R2-D2 Metadata Decryption</h1>
+        
+        <div id="video-wrapper">
+            <video id="rebel-video" controls width="100%" poster="r2_poster.png">
+                <source id="video-source" src="Message2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div id="status-bar">
+                Access Level: <span id="access-level">RESTRICTED (50%)</span>
+            </div>
+        </div>
 
+        <div class="auth-box">
+            <input type="text" id="api-token" placeholder="Enter API Token...">
+            <button onclick="checkAuth()">Unlock Full Message</button>
+        </div>
+
+        <div class="glass-card">
+            <h3>Visual Reconnaissance (Decrypted)</h3>
+            <div id="image-gallery" class="image-grid">
+                <p class="log-line" style="color: #666;">Awaiting decrypted stream...</p>
+            </div>
+        </div>
+
+        <table id="plans-table">
+            <thead>
+                <tr>
+                    <th>Plan Name</th>
+                    <th>MD5 Hash</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                </tbody>
+        </table>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
