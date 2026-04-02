@@ -43,7 +43,6 @@ body { background: var(--bg); color: white; font-family: 'Courier New', monospac
     box-shadow: 0 0 10px var(--neon-blue);
 }
 
-/* Add to style.css */
 .image-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
