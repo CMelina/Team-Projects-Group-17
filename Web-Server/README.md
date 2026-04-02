@@ -1,84 +1,54 @@
-#  Rebel Dissemination Hub - Web Server Setup
+# Rebel Dissemination Hub: Metadata Decryption
 
-This folder contains the Node.js rebel server responsible for the "Obi-Wan Kenobi" authentication test, RFC 5424 logging, and the real-time display of exfiltrated Death Star plans.
-
-##  Prerequisites
-
-Before starting, ensure your system has the following installed:
-- Node.js (v16 or higher)
-- npm (Node Package Manager)
-- XBee Modules (connected via USB)
+## Overview
+This server acts as the central node for receiving and displaying exfiltrated Imperial data. It integrates **XBee Serial communication** with a responsive web dashboard to provide real-time reconnaissance updates and secure message playback.
 
 ---
 
-##  Installation & Launch
+## Quick Start 
 
-Follow these steps in order to start the server on your local machine:
+### 1. Clear Background Processes
+For preventative measures, kill any lingering past processes on Port 3000: `sudo fuser -k 3000/tcp`
 
-### 1. Install Dependencies
-Open terminal in this folder and run:
-```bash
-npm install
-```
-*Note: This downloads the necessary libraries (`express`, `serialport`) listed in the `package.json`.*
+### 2. Launch the Server
+Start the Node.js environment with `node server.js`
 
-### 2. Configure Hardware Path
-
-Open `server.js` and ensure the serial path is set to the Linux USB port:
-
-```
-// Ensure this matches XBee device name
-const port = new SerialPort({ path: '/dev/ttyUSB0', baudRate: 115200 });
-```
-
-### 3. Start the Server
-
-Run the launch command:
-```
-node server.js
-```
-The console should display: `Server listening on http://localhost:3000`.
+### 3. Access the Dashboard
+Open Firefox and navigate to: `http://localhost:3000`
 
 ---
 
-## Mission Operations & Logic
+## Features & Credentials
+| Feature | Logic | Credential |
+| :--- | :--- | :--- |
+| **Video Auth** | Swaps `Message2.mp4` to `Message1.mp4` | `REBEL_STRIKE_2026` |
+| **Live Gallery** | Auto-polls `/api/list-images` every 3s | N/A (Automated) |
+| **XBee Feed** | Listens on `/dev/ttyUSB0` (115200 baud) | N/A (Hardware) |
 
-### The Obi-Wan Kenobi Message Authentication Test
-
-The server handles the restricted dissemination of the R2-D2 holographic data:
-
-- Public Access (default): The HUD loads `Message2.mp4` (a 50% partial version of the mission message).
-- Elevated Access: Entering the correct API Token triggers a frontend swap to `Message1.mp4` (the full mission message).
-
-### Data Integrity (The Death Star Plans)
-
-- Storage: The C++ decryption module must save the 10 exfiltrated images to the `/received_plans` folder.
-- Display: The web interface polls the server and updates the scrollable table with filenames and verification statuses.
-
-### RFC 5424 Logging
-
-All system events (authentication success/fail, XBee packet arrival, image verification) are appended to `system_logs.log` using the RFC 5424 standard:
-
-```
-<PRI>VERSION TIMESTAMP HOSTNAME APP-NAME PROCID MSGID MSG
-```
 ---
 
-## Project Structure
+## Terminal Operations
+To simulate a new data drop or re-run the decryption during the demo, use these exact commands from the terminal:
 
-| File | Description |
-| --- | --- |
-| `server.js` | Express backend, API routes, and SerialPort listener. |
-| `app.js` | Frontend HUD logic and video source swapping. |
-| `index.html` | Undercover web interface structure. |
-| `style.css` | Glassmorphism/Terminal styling for the Rebel UI. |
-| `Message1.mp4` | Unrestricted Full Message (The Full Reveal). |
-| `Message2.mp4` | Restricted Partial Message (The 50% Teaser). |
-| `received_plans/` | Landing directory for decrypted exfiltration data. |
-| `system_logs.log` | RFC 5424 Append-Only Log. |
+### 1. Verification of Encrypted Data
+Check for incoming `.enc` files with `ls -l *.enc`
+
+### 2. The Decryption Command
+Use the decryption tool to move files into the gallery folder with `~/"Team Projects Web Server"/Team-Projects-Group-17/encryption-decryption/build/secure_transfer decrypt crops received_plans`
+
+### 3. Live Log Monitoring
+Open a second terminal tab to watch system events and XBee traffic with `tail -f system_logs.log`
 
 ---
 
 ## Troubleshooting
+- If the gallery shows "SyntaxError" or "404," in the developer tools, the server is likely a ghost process. Run the `fuser` command in Step 1 and restart.
+- If the XBee fails to initialize, ensure your user has dialout permissions: `  sudo chmod 666 /dev/ttyUSB0`
 
-- SerialPort Error: If the server crashes on startup, run `ls /dev/tty*` in the terminal to find the correct path for the XBee and update it in `server.js`.
+---
+
+## Project Structure
+* `server.js`: Node/Express backend & RFC 5424 Logger.
+* `app.js`: Frontend logic (auth, video swapping, gallery polling).
+* `received_plans/`: Storage for decrypted `.png` assets (gallery source).
+* `Message1.mp4` / `Message2.mp4`: Local briefing files.
