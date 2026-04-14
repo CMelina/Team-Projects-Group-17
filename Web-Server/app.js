@@ -1,36 +1,64 @@
 let fullAccess = false;
 const API_KEY = "REBEL_STRIKE_2026";
 
-// Authentication and video Swap
 async function checkAuth() {
     const tokenInput = document.getElementById('api-token').value;
-    const video = document.getElementById('rebel-video');
-    const videoSource = document.getElementById('video-source');
-    const status = document.getElementById('access-level');
+    const authBox = document.querySelector('.auth-box');
 
     if (tokenInput === API_KEY) {
-        fullAccess = true;
-        
-        // Change source to Message 1
-        videoSource.src = "Message1.mp4";
-        
-        // Call .load() after changing the src
-        video.load(); 
-        
-        status.innerText = "ACCESS GRANTED: MESSAGE 1 UNLOCKED";
-        status.style.color = "#2ecc71";
-        
-        video.play(); // Auto-start the new message
+        // overwrite the HTML to show the 2FA UI
+        authBox.innerHTML = `
+            <div id="2fa-area" style="text-align:center;">
+                <p style="color:#00d2ff; font-size: 14px; margin-bottom: 10px;">STEP 2: SCAN AUTHENTICATOR</p>
+                <img id="qr-image" style="background:white; padding:10px; border-radius:5px; width:150px; display:block; margin: 0 auto;">
+                <input type="text" id="2fa-code" placeholder="Enter 6-digit code" style="display:block; width:80%; margin:15px auto; text-align:center;">
+                <button onclick="confirm2FA()" class="rebel-btn" style="width:100%;">VALIDATE ACCESS</button>
+            </div>
+        `;
+
+        setTimeout(() => {
+            const secret = "JBSWY3DPEHPK3PXP";
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=otpauth://totp/RebelStrike?secret=${secret}%26issuer=RebelHub`;
+            
+            const imgElement = document.getElementById('qr-image');
+            if (imgElement) {
+                imgElement.src = qrUrl;
+                console.log("QR Code source set successfully.");
+            }
+        }, 50);
+
     } else {
         alert("Invalid Token. Access Denied.");
     }
 }
 
-// Restricted playback for Message 2
+function confirm2FA() {
+    const code = document.getElementById('2fa-code').value;
+    
+    // 123456 is master code for logic testing purposes
+    if (code === "123456") {
+        fullAccess = true;
+        const video = document.getElementById('rebel-video');
+        const videoSource = document.getElementById('video-source');
+        const status = document.getElementById('access-level');
+
+        videoSource.src = "Message1.mp4";
+        video.load(); 
+        status.innerText = "ACCESS GRANTED: 2FA VERIFIED";
+        status.style.color = "#2ecc71";
+        video.play();
+        
+        document.getElementById('2fa-area').style.display = 'none';
+    } else {
+        alert("Invalid 2FA Code. Use 123456 for the demo.");
+    }
+}
+
+// message 2 playback
 const video = document.getElementById('rebel-video');
 if (video) {
     video.ontimeupdate = function() {
-        // If they haven't authed and try to watch more than half of Message 2
+        // if they have not authed and try to watch more than half of message 2
         if (!fullAccess && video.currentTime > (video.duration / 2)) {
             video.pause();
             video.currentTime = video.duration / 2;
