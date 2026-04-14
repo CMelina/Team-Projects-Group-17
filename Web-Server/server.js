@@ -8,7 +8,7 @@ const app = express();
 const PORT = 3000;
 const LOG_FILE = 'system_logs.log';
 
-// Static folders
+// static folders
 app.use(express.static(__dirname));
 app.use('/plans', express.static(path.join(__dirname, 'received_plans')));
 
