@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>R2-D2 Metadata Decryption</h1>
+        <h1>R2-D2 Message Decryption</h1>
         
         <div id="video-wrapper">
             <video id="rebel-video" controls width="100%" poster="r2_poster.png">
@@ -21,9 +21,18 @@
         </div>
 
         <div class="auth-box">
-            <input type="text" id="api-token" placeholder="Enter API Token...">
-            <button onclick="checkAuth()">Unlock Full Message</button>
-        </div>
+    <div id="api-input-area">
+        <input type="text" id="api-token" placeholder="Enter API Token...">
+        <button onclick="checkAuth()">Unlock Full Message</button>
+    </div>
+
+    <div id="2fa-area" style="display:none; margin-top:15px; border-top:1px solid #00d2ff; padding-top:10px;">
+        <p style="color:#00d2ff; font-size: 12px;">STEP 2: SCAN FOR ACCESS</p>
+        <img id="qr-image" style="background:white; padding:5px; margin:10px auto; display:block; width:150px;">
+        <input type="text" id="2fa-code" placeholder="6-Digit Code" style="width:140px; text-align:center;">
+        <button onclick="verify2FA()" class="rebel-btn">VERIFY</button>
+    </div>
+ </div>
 
         <div class="glass-card">
             <h3>Visual Reconnaissance (Decrypted)</h3>
