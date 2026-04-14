@@ -18,7 +18,6 @@ body { background: var(--bg); color: white; font-family: 'Courier New', monospac
 
 @media (max-width: 800px) { .grid-layout { grid-template-columns: 1fr; } }
 
-/* Image Gallery Grid */
 .image-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
